@@ -4,12 +4,13 @@ import { Button } from "@/components/ui/button";
 import { Textarea } from "@/components/ui/textarea";
 import { ArrowUp } from "lucide-react";
 
-type ChatInputProps = {
-  onSendMessage: (message: string) => void;
-  isLoading?: boolean;
-};
-
-export const ChatInput = ({ onSendMessage, isLoading = false }: ChatInputProps) => {
+export const ChatInput = ({ 
+  onSendMessage, 
+  isLoading = false 
+}: { 
+  onSendMessage: (message: string) => void; 
+  isLoading?: boolean; 
+}) => {
   const [message, setMessage] = useState("");
 
   const handleSubmit = (e: React.FormEvent) => {

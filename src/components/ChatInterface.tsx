@@ -30,58 +30,45 @@ export const ChatInterface = () => {
       timestamp: "10:30 AM",
     }],
   }]);
-
   const [activeConversationId, setActiveConversationId] = useState("1");
   const [isLoading, setIsLoading] = useState(false);
 
-  const activeConversation = conversations.find(
-    (conv) => conv.id === activeConversationId
-  ) || conversations[0];
+  const activeConv = conversations.find(c => c.id === activeConversationId) || conversations[0];
 
   const handleSendMessage = (content: string) => {
     if (!content.trim() || isLoading) return;
     setIsLoading(true);
 
     // Add user message
-    const userMessage: Message = {
-      id: `msg-${Date.now()}-user`,
-      content,
-      isUser: true,
+    const newMsg = (isUser: boolean) => ({
+      id: `msg-${Date.now()}-${isUser ? 'user' : 'ai'}`,
+      content: isUser ? content : "This is a simulated response from the DeepSeek LLM API.",
+      isUser,
       timestamp: new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' }),
-    };
+    });
 
     setConversations(prev => prev.map(conv => 
       conv.id === activeConversationId 
-        ? { ...conv, messages: [...conv.messages, userMessage] }
+        ? { ...conv, messages: [...conv.messages, newMsg(true)] }
         : conv
     ));
 
     // Simulate AI response
     setTimeout(() => {
-      const aiMessage: Message = {
-        id: `msg-${Date.now()}-ai`,
-        content: "This is a simulated response from the DeepSeek LLM API. In a real implementation, this would be replaced with an actual API call to process your message and return a response.",
-        isUser: false,
-        timestamp: new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' }),
-      };
-
       setConversations(prev => prev.map(conv => 
         conv.id === activeConversationId 
-          ? { ...conv, messages: [...conv.messages, aiMessage] }
+          ? { ...conv, messages: [...conv.messages, newMsg(false)] }
           : conv
       ));
-
       setIsLoading(false);
     }, 1500);
   };
 
   const handleNewConversation = () => {
-    const newConversation: Conversation = {
+    const newConv = {
       id: `conv-${Date.now()}`,
       title: "New Conversation",
-      timestamp: new Date().toLocaleString([], {
-        month: 'short', day: 'numeric', hour: '2-digit', minute: '2-digit'
-      }),
+      timestamp: new Date().toLocaleString([], { month: 'short', day: 'numeric', hour: '2-digit', minute: '2-digit' }),
       messages: [{
         id: `msg-welcome-${Date.now()}`,
         content: "Hello! How can I assist you today?",
@@ -90,8 +77,8 @@ export const ChatInterface = () => {
       }],
     };
 
-    setConversations(prev => [newConversation, ...prev]);
-    setActiveConversationId(newConversation.id);
+    setConversations(prev => [newConv, ...prev]);
+    setActiveConversationId(newConv.id);
   };
 
   return (
@@ -106,28 +93,17 @@ export const ChatInterface = () => {
       </div>
       <div className="flex-1 flex flex-col">
         <div className="p-4 border-b">
-          <h1 className="text-xl font-semibold text-primary">
-            {activeConversation.title}
-          </h1>
+          <h1 className="text-xl font-semibold text-primary">{activeConv.title}</h1>
         </div>
         <div className="flex-1 overflow-y-auto p-4">
-          {activeConversation.messages.map((message) => (
-            <ChatMessage
-              key={message.id}
-              message={message.content}
-              isUser={message.isUser}
-              timestamp={message.timestamp}
-            />
+          {activeConv.messages.map((msg) => (
+            <ChatMessage key={msg.id} message={msg.content} isUser={msg.isUser} timestamp={msg.timestamp} />
           ))}
           {isLoading && (
             <div className="flex justify-start">
               <div className="bg-secondary rounded-lg p-4 flex items-center space-x-2">
                 {[0, 300, 600].map((delay, i) => (
-                  <div 
-                    key={i}
-                    className="w-2 h-2 bg-primary rounded-full animate-bounce" 
-                    style={{ animationDelay: `${delay}ms` }}
-                  />
+                  <div key={i} className="w-2 h-2 bg-primary rounded-full animate-bounce" style={{ animationDelay: `${delay}ms` }} />
                 ))}
               </div>
             </div>
