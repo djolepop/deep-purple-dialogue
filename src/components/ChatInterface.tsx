@@ -118,7 +118,7 @@ export const ChatInterface = () => {
   };
 
   return (
-    <div className="flex h-screen">
+    <div className="flex h-screen w-full">
       <div className="w-64 shrink-0">
         <ChatSidebar
           conversations={conversations}
