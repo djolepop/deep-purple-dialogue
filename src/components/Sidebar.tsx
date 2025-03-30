@@ -57,7 +57,7 @@ export const ChatSidebar = ({
                 {conversations.map((conversation) => (
                   <SidebarMenuItem key={conversation.id}>
                     <SidebarMenuButton
-                      active={activeConversation === conversation.id}
+                      isActive={activeConversation === conversation.id}
                       onClick={() => onSelectConversation(conversation.id)}
                       className="w-full justify-start"
                     >
