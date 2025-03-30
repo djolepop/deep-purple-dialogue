@@ -45,42 +45,43 @@
     --sidebar-ring: 262 83% 58%;
   }
 
+  /* Updated dark mode with deeper purples */
   .dark {
-    --background: 240 10% 3.9%;
-    --foreground: 0 0% 98%;
+    --background: 256 30% 10%;
+    --foreground: 263 10% 95%;
 
-    --card: 240 10% 3.9%;
+    --card: 256 30% 14%;
     --card-foreground: 0 0% 98%;
 
-    --popover: 240 10% 3.9%;
+    --popover: 256 33% 12%;
     --popover-foreground: 0 0% 98%;
 
     --primary: 263 75% 63%;
     --primary-foreground: 0 0% 98%;
 
-    --secondary: 240 3.7% 15.9%;
+    --secondary: 256 20% 20%;
     --secondary-foreground: 0 0% 98%;
 
-    --muted: 240 3.7% 15.9%;
-    --muted-foreground: 240 5% 64.9%;
+    --muted: 256 15% 20%;
+    --muted-foreground: 240 10% 70%;
 
-    --accent: 240 3.7% 15.9%;
+    --accent: 256 20% 30%;
     --accent-foreground: 0 0% 98%;
 
     --destructive: 0 62.8% 30.6%;
     --destructive-foreground: 0 0% 98%;
 
-    --border: 240 3.7% 15.9%;
-    --input: 240 3.7% 15.9%;
+    --border: 256 25% 25%;
+    --input: 256 25% 25%;
     --ring: 263 75% 63%;
 
-    --sidebar-background: 256 33% 10%;
+    --sidebar-background: 256 33% 15%;
     --sidebar-foreground: 240 4.8% 95.9%;
     --sidebar-primary: 263 75% 63%;
     --sidebar-primary-foreground: 0 0% 100%;
-    --sidebar-accent: 256 33% 15%;
+    --sidebar-accent: 256 33% 20%;
     --sidebar-accent-foreground: 240 4.8% 95.9%;
-    --sidebar-border: 256 33% 15%;
+    --sidebar-border: 256 33% 25%;
     --sidebar-ring: 263 75% 63%;
   }
 }
@@ -91,10 +92,20 @@
   }
 
   body {
-    @apply bg-background text-foreground;
+    @apply bg-background text-foreground dark;
   }
 }
 
+/* Enable gradient backgrounds */
+.gradient-purple-bg {
+  background: linear-gradient(135deg, hsl(256 33% 15%) 0%, hsl(280 30% 20%) 100%);
+}
+
+.gradient-sidebar {
+  background: linear-gradient(180deg, hsl(256 33% 15%) 0%, hsl(270 30% 12%) 100%);
+}
+
+/* Keep the rest of the existing CSS */
 .message-enter {
   opacity: 0;
   transform: translateY(10px);

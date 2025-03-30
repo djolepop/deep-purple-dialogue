@@ -39,8 +39,8 @@ export const ChatSidebar = ({
   return (
     <SidebarProvider defaultOpen={!collapsed}>
       <div className="relative h-full group/sidebar-wrapper">
-        <Sidebar>
-          <SidebarContent>
+        <Sidebar className="gradient-sidebar border-r border-sidebar-border">
+          <SidebarContent className="pt-2">
             <div className="px-4 py-4">
               <Button 
                 onClick={onNewConversation} 
@@ -51,7 +51,7 @@ export const ChatSidebar = ({
               </Button>
             </div>
             <SidebarGroup>
-              <SidebarGroupLabel className={cn(collapsed && "sr-only")}>
+              <SidebarGroupLabel className={cn(collapsed && "sr-only", "text-sidebar-foreground/80")}>
                 Conversations
               </SidebarGroupLabel>
               <SidebarGroupContent>
@@ -61,7 +61,7 @@ export const ChatSidebar = ({
                       <SidebarMenuButton
                         isActive={activeConversation === conversation.id}
                         onClick={() => onSelectConversation(conversation.id)}
-                        className="w-full justify-start"
+                        className="w-full justify-start hover:bg-sidebar-accent/80 transition-colors"
                       >
                         <MessageSquare className="h-4 w-4" />
                         {!collapsed && (
@@ -81,9 +81,9 @@ export const ChatSidebar = ({
           </SidebarContent>
         </Sidebar>
         <Button
-          variant="ghost"
+          variant="outline"
           size="icon"
-          className="absolute right-0 top-3 translate-x-1/2 rounded-full border shadow-sm bg-background"
+          className="absolute right-0 top-3 translate-x-1/2 rounded-full border shadow-sm bg-sidebar-accent text-sidebar-accent-foreground z-10"
           onClick={() => {
             setCollapsed(!collapsed);
           }}
