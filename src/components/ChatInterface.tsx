@@ -19,24 +19,19 @@ type Conversation = {
 };
 
 export const ChatInterface = () => {
-  // Mock data
-  const [conversations, setConversations] = useState<Conversation[]>([
-    {
-      id: "1",
-      title: "Getting Started",
-      timestamp: "Today, 10:30 AM",
-      messages: [
-        {
-          id: "msg1",
-          content: "Hello! How can I assist you today?",
-          isUser: false,
-          timestamp: "10:30 AM",
-        },
-      ],
-    },
-  ]);
+  const [conversations, setConversations] = useState<Conversation[]>([{
+    id: "1",
+    title: "Getting Started",
+    timestamp: "Today, 10:30 AM",
+    messages: [{
+      id: "msg1",
+      content: "Hello! How can I assist you today?",
+      isUser: false,
+      timestamp: "10:30 AM",
+    }],
+  }]);
 
-  const [activeConversationId, setActiveConversationId] = useState<string>("1");
+  const [activeConversationId, setActiveConversationId] = useState("1");
   const [isLoading, setIsLoading] = useState(false);
 
   const activeConversation = conversations.find(
@@ -45,9 +40,9 @@ export const ChatInterface = () => {
 
   const handleSendMessage = (content: string) => {
     if (!content.trim() || isLoading) return;
-
     setIsLoading(true);
 
+    // Add user message
     const userMessage: Message = {
       id: `msg-${Date.now()}-user`,
       content,
@@ -55,20 +50,13 @@ export const ChatInterface = () => {
       timestamp: new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' }),
     };
 
-    // Add user message to the conversation
-    setConversations((prevConversations) =>
-      prevConversations.map((conv) => {
-        if (conv.id === activeConversationId) {
-          return {
-            ...conv,
-            messages: [...conv.messages, userMessage],
-          };
-        }
-        return conv;
-      })
-    );
+    setConversations(prev => prev.map(conv => 
+      conv.id === activeConversationId 
+        ? { ...conv, messages: [...conv.messages, userMessage] }
+        : conv
+    ));
 
-    // Simulate AI response after a delay
+    // Simulate AI response
     setTimeout(() => {
       const aiMessage: Message = {
         id: `msg-${Date.now()}-ai`,
@@ -77,17 +65,11 @@ export const ChatInterface = () => {
         timestamp: new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' }),
       };
 
-      setConversations((prevConversations) =>
-        prevConversations.map((conv) => {
-          if (conv.id === activeConversationId) {
-            return {
-              ...conv,
-              messages: [...conv.messages, aiMessage],
-            };
-          }
-          return conv;
-        })
-      );
+      setConversations(prev => prev.map(conv => 
+        conv.id === activeConversationId 
+          ? { ...conv, messages: [...conv.messages, aiMessage] }
+          : conv
+      ));
 
       setIsLoading(false);
     }, 1500);
@@ -98,22 +80,17 @@ export const ChatInterface = () => {
       id: `conv-${Date.now()}`,
       title: "New Conversation",
       timestamp: new Date().toLocaleString([], {
-        month: 'short',
-        day: 'numeric',
-        hour: '2-digit',
-        minute: '2-digit'
+        month: 'short', day: 'numeric', hour: '2-digit', minute: '2-digit'
       }),
-      messages: [
-        {
-          id: `msg-welcome-${Date.now()}`,
-          content: "Hello! How can I assist you today?",
-          isUser: false,
-          timestamp: new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' }),
-        },
-      ],
+      messages: [{
+        id: `msg-welcome-${Date.now()}`,
+        content: "Hello! How can I assist you today?",
+        isUser: false,
+        timestamp: new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' }),
+      }],
     };
 
-    setConversations((prev) => [newConversation, ...prev]);
+    setConversations(prev => [newConversation, ...prev]);
     setActiveConversationId(newConversation.id);
   };
 
@@ -145,9 +122,13 @@ export const ChatInterface = () => {
           {isLoading && (
             <div className="flex justify-start">
               <div className="bg-secondary rounded-lg p-4 flex items-center space-x-2">
-                <div className="w-2 h-2 bg-primary rounded-full animate-bounce" style={{ animationDelay: "0ms" }}></div>
-                <div className="w-2 h-2 bg-primary rounded-full animate-bounce" style={{ animationDelay: "300ms" }}></div>
-                <div className="w-2 h-2 bg-primary rounded-full animate-bounce" style={{ animationDelay: "600ms" }}></div>
+                {[0, 300, 600].map((delay, i) => (
+                  <div 
+                    key={i}
+                    className="w-2 h-2 bg-primary rounded-full animate-bounce" 
+                    style={{ animationDelay: `${delay}ms` }}
+                  />
+                ))}
               </div>
             </div>
           )}
